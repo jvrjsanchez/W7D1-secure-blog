@@ -1,4 +1,5 @@
 // app.js
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const userRoute = require("./routes/auth");
@@ -6,12 +7,13 @@ const postRoute = require("./routes/posts");
 const CONNECTDB = require("./config/config");
 const PORT = process.env.PORT || 5000;
 
+
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Database Connection
-CONNECTDB(process.env.MONGO_DB_URL);
+CONNECTDB(process.env.DATABASE_URI);
 
 // Routes
 app.use("/api/user", userRoute);

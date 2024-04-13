@@ -2,6 +2,7 @@
 
 // Importing mongoose for MongoDB schema creation
 const mongoose = require("mongoose");
+console.log(process.env)
 
 // Importing bcrypt for password hashing
 const bcrypt = require("bcrypt");

@@ -31,9 +31,12 @@ class PostController {
     static async DeletePostById(req, res, next) {
         try {
             // Extracting the post ID from the request parameters
+
             const postId = req.params.id;
 
-            // Implement deletion logic here
+             // Implement deletion logic here
+            const deleted = await Post.destroy({ where: { id: postId, userId: req.user.id } });
+            if (!deleted) return res.status(404).json({ message: 'Post not found' });
 
             // Sending a success response after successful deletion
             res.status(200).json({ message: 'Post deleted successfully' });
@@ -51,6 +54,8 @@ class PostController {
             const postId = req.params.id;
 
             // Implement update logic here
+            const updated = await Post.update({ title, description }, { where: { id: postId, userId: req.user.id } });
+            if (updated[0] === 0) return res.status(404).json({ message: 'Post not found or no change made' });
 
             // Sending a success response after successful update
             res.status(200).json({ message: 'Post updated successfully' });
@@ -68,6 +73,8 @@ class PostController {
             const postId = req.params.id;
 
             // Implement retrieval logic here
+            const post = await Post.findOne({ where: { id: postId } });
+            if (!post) return res.status(404).json({ message: 'Post not found' });
 
             // Sending a success response with the retrieved post
             res.status(200).json({ message: 'Retrieved post by ID' });
@@ -85,6 +92,8 @@ class PostController {
             const userId = req.params.userId;
 
             // Implement retrieval logic here
+            const posts = await Post.findAll({ where: { userId } });
+            if (posts.length === 0) return res.status(404).json({ message: 'No posts found for this user' });
 
             // Sending a success response with the retrieved posts
             res.status(200).json({ message: 'Retrieved posts by user ID' });
